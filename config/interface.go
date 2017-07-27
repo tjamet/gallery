@@ -1,6 +1,6 @@
 package config
 
 
-type ConfigGetter interface {
-	Get(name string) string
+type Getter interface {
+	Get(name string) (string, error)
 }

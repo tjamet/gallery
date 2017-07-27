@@ -21,3 +21,11 @@ func TestGet(t *testing.T){
 	assert.NoError(t, err)
 	assert.Equal(t, "my value", value)
 }
+
+func TestNotBuilt(t *testing.T){
+	value, err := With().
+		Path("resources/testConfig").
+		Get("myKey")
+	assert.NoError(t, err)
+	assert.NotNil(t, value)
+}

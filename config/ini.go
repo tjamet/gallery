@@ -14,8 +14,7 @@ type INIConfig struct {
 
 func With() (*INIConfig) {
 	c := &INIConfig{}
-	c.section = "default"
-	return c
+	return c.Section("default")
 }
 
 func (c *INIConfig) Section(name string) *INIConfig {
@@ -45,6 +44,9 @@ func (c *INIConfig) Build() *INIConfig {
 }
 
 func (c *INIConfig) Get(name string) (string, error) {
+	if c.cfg == nil {
+		c.Build()
+	}
 	s, err := c.cfg.GetSection(c.section)
 	if err != nil {
 		return "", err
