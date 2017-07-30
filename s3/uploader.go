@@ -11,8 +11,7 @@ import (
 )
 
 type s3Uploader interface {
-	Path(key string) s3Uploader
-	Body(body io.ReadSeeker) s3Uploader
+	SetBody(body io.ReadSeeker)
 	Upload() error
 }
 
@@ -85,6 +84,10 @@ func (u *uploader) ContentType(contentType string) *uploader {
 
 func UploaderWith() *uploader {
 	return &uploader{}
+}
+
+func (u *uploader) SetBody(body io.ReadSeeker) {
+	u.Body(body)
 }
 
 func (u *uploader) Upload() error {
