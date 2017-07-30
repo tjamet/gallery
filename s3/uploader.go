@@ -7,6 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"io/ioutil"
 	"fmt"
+	"crypto/sha256"
 )
 
 type s3Uploader interface {
@@ -68,6 +69,12 @@ func (u *uploader) Body(body io.ReadSeeker) *uploader {
 	u.Error(wrap("Failed to read content", err))
 	u.contentLength = aws.Int64(int64(len(data)))
 	u.ContentType(http.DetectContentType(data))
+	if u.key == nil {
+		h := sha256.New()
+		h.Write(data)
+		h.Sum(nil)
+		u.key = aws.String(fmt.Sprintf("%x", h.Sum(nil)))
+	}
 	return u
 }
 
@@ -94,4 +101,12 @@ func (u *uploader) Upload() error {
 	}
 	_, err := u.client.PutObject(params)
 	return err
+}
+
+func (u *uploader) GetKey() string {
+	return *u.key
+}
+
+func (u *uploader) GetName() string {
+	return u.GetKey()
 }
