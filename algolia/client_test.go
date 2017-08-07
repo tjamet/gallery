@@ -5,6 +5,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/google/uuid"
 	"github.com/algolia/algoliasearch-client-go/algoliasearch"
+	"time"
 )
 
 func TestClient(t *testing.T) {
@@ -22,6 +23,8 @@ func TestClient(t *testing.T) {
 	}
 	err = builder.UpdateObjects(object)
 	assert.NoError(t, err)
+
+	time.Sleep(1 * time.Second)
 	client, err = builder.newAdminClient()
 	assert.NoError(t, err)
 	indexes, err = client.ListIndexes()
