@@ -55,5 +55,5 @@ func TestUpload(t *testing.T) {
 func TestUploadName(t *testing.T){
 	up := &uploader{}
 	up.Body(strings.NewReader("sone content"))
-	assert.Equal(t,"c6acbde22620b74515a4e54c315ba24377ec5599e54dd5aeba4de1b0a1e35d46", *up.GetName())
+	assert.Equal(t,"c6acbde22620b74515a4e54c315ba24377ec5599e54dd5aeba4de1b0a1e35d46", up.GetName())
 }

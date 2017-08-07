@@ -61,19 +61,7 @@ func (u *uploader) Error(err error) *uploader {
 }
 
 func (u *uploader) Body(body io.ReadSeeker) *uploader {
-	u.body = body
-	data, err := ioutil.ReadAll(body)
-	u.Error(wrap("Failed to read content", err))
-	_, err = body.Seek(0, io.SeekStart)
-	u.Error(wrap("Failed to read content", err))
-	u.contentLength = aws.Int64(int64(len(data)))
-	u.ContentType(http.DetectContentType(data))
-	if u.key == nil {
-		h := sha256.New()
-		h.Write(data)
-		h.Sum(nil)
-		u.key = aws.String(fmt.Sprintf("%x", h.Sum(nil)))
-	}
+	u.SetBody(body)
 	return u
 }
 
@@ -87,7 +75,19 @@ func UploaderWith() *uploader {
 }
 
 func (u *uploader) SetBody(body io.ReadSeeker) {
-	u.Body(body)
+	u.body = body
+	data, err := ioutil.ReadAll(body)
+	u.Error(wrap("Failed to read content", err))
+	_, err = body.Seek(0, io.SeekStart)
+	u.Error(wrap("Failed to read content", err))
+	u.contentLength = aws.Int64(int64(len(data)))
+	u.ContentType(http.DetectContentType(data))
+	if u.key == nil {
+		h := sha256.New()
+		h.Write(data)
+		h.Sum(nil)
+		u.key = aws.String(fmt.Sprintf("%x", h.Sum(nil)))
+	}
 }
 
 func (u *uploader) Upload() error {
