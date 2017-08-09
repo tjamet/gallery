@@ -42,6 +42,23 @@ func TestBuilder_Add(t *testing.T) {
 		"g": {"1"},
 	}, b.values)
 }
+func TestBuilder_Update(t *testing.T) {
+	b := With().Update(
+		url.Values{
+			"w": {"100"},
+			"h": {"100"},
+		},
+		url.Values{
+			"w": {"140"},
+			"g": {"1"},
+		},
+	)
+	assert.Equal(t, url.Values{
+		"w": {"140"},
+		"h": {"100"},
+		"g": {"1"},
+	}, b.values)
+}
 
 func TestBuilder_ForImage(t *testing.T) {
 	b := With().Builder(testFormatter{})
