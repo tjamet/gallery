@@ -2,6 +2,10 @@ package url
 
 import "net/url"
 
+var NoUpscale url.Values = url.Values{
+	"fit": {"max"},
+}
+
 var Small url.Values = url.Values{
 	"w": {"200"},
 	"h": {"200"},
@@ -11,7 +15,6 @@ var Medium url.Values = url.Values{
 	"w": {"1000"},
 	"h": {"1000"},
 }
-
 
 var Large url.Values = url.Values{
 	"w": {"3000"},

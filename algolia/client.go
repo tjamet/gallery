@@ -6,7 +6,7 @@ import (
 )
 
 type AlgoliaClient interface {
-	Update(objects ...algoliasearch.Object) error
+	UpdateObjects(objects ...algoliasearch.Object) error
 }
 
 type client struct {
@@ -54,4 +54,17 @@ func (c *client) UpdateObjects(object ...algoliasearch.Object) error {
 	index := cl.InitIndex(c.indexName)
 	_, err = index.AddObjects(object)
 	return err
+}
+
+func NewObjectFromMetadata(in map[string]interface{}) algoliasearch.Object {
+	r := algoliasearch.Object(in)
+	_, ok := r["objectID"]
+	if !ok {
+		_, ok = r["ID"]
+		if ok {
+			r["objectID"] = r["ID"]
+			delete(r, "ID")
+		}
+	}
+	return r
 }

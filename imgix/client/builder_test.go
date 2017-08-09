@@ -1,10 +1,11 @@
 package client
 
 import (
-	"testing"
-	"github.com/stretchr/testify/assert"
-	"net/url"
 	"fmt"
+	"net/url"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type testConfig struct {
@@ -22,7 +23,7 @@ func (t *testConfig) Get(name string) (string, error) {
 func TestBuilder_New(t *testing.T) {
 	var b *builder
 	b = With().Config(&testConfig{
-		cfgs: map[string]string {"domain":"test.imgix.net"},
+		cfgs: map[string]string{"domain": "test"},
 	})
 	cfg := b.New()
 	assert.NotNil(t, cfg)
@@ -33,7 +34,7 @@ func TestBuilder_New(t *testing.T) {
 	assert.Equal(t, "https://test.imgix.net/test.jpg?w=10", cfg.URL("test.jpg", values))
 
 	b = With().Config(&testConfig{
-		cfgs: map[string]string {"domain":"test.imgix.net", "signToken": "testToken"},
+		cfgs: map[string]string{"domain": "test", "signToken": "testToken"},
 	})
 	cfg = b.New()
 	assert.NotNil(t, cfg)

@@ -2,10 +2,11 @@ package algolia
 
 import (
 	"testing"
-	"github.com/stretchr/testify/assert"
-	"github.com/google/uuid"
-	"github.com/algolia/algoliasearch-client-go/algoliasearch"
 	"time"
+
+	"github.com/algolia/algoliasearch-client-go/algoliasearch"
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestClient(t *testing.T) {
@@ -18,7 +19,7 @@ func TestClient(t *testing.T) {
 	originalLength := len(indexes)
 
 	object := algoliasearch.Object{
-		"testKey" : "value",
+		"testKey":  "value",
 		"objectID": uuid.New().String(),
 	}
 	err = builder.UpdateObjects(object)
@@ -35,8 +36,7 @@ func TestClient(t *testing.T) {
 	index := client.InitIndex(indexName)
 	res, err := index.Search("value", nil)
 	assert.NoError(t, err)
-	assert.Equal(t,1, res.NbHits)
+	assert.Equal(t, 1, res.NbHits)
 
 	client.DeleteIndex(indexName)
 }
-

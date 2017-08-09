@@ -1,9 +1,10 @@
 package config
 
 import (
-	"testing"
-	"github.com/stretchr/testify/assert"
 	"os/user"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestHomeDir(t *testing.T) {

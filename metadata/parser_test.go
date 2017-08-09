@@ -2,11 +2,12 @@ package metadata
 
 import (
 	"testing"
+
 	"github.com/stretchr/testify/assert"
 )
 
 func TestMetadata_GetMetadata(t *testing.T) {
-	m := FromFile("../resources/images/test.jpg")
+	m := FromFile("../resources/images/test.jpg").Load()
 	expected := map[string]interface{}{
 		"Artist":    "Thibault JAMET",
 		"Copyright": "Photo by Thibault JAMET - www.thibaultjamet.fr",

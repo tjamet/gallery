@@ -1,10 +1,11 @@
 package visiter
 
 import (
-	"os"
-	"github.com/chrislusf/glow/flow"
 	"log"
+	"os"
 	"path/filepath"
+
+	"github.com/chrislusf/glow/flow"
 )
 
 type VisitInfo struct {
@@ -37,4 +38,8 @@ func New(path string, shard int) *flow.Dataset {
 		}
 	}
 	return fc.Source(fn, shard)
+}
+
+func GetPath(v *VisitInfo) string {
+	return v.Path
 }

@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/tjamet/gallery/config"
 	"github.com/parkr/imgix-go"
+	"github.com/tjamet/gallery/config"
 )
 
 type builder struct {
@@ -14,7 +14,12 @@ type client struct {
 }
 
 func With() *builder {
-	return &builder{}
+	return &builder{
+		cfg: config.With().
+			Path("~/.imgix/credentials").
+			Section("default").
+			Build(),
+	}
 }
 
 func (b *builder) Config(cfg config.Getter) *builder {
@@ -22,14 +27,14 @@ func (b *builder) Config(cfg config.Getter) *builder {
 	return b
 }
 
-func (b *builder) New() (*client) {
+func (b *builder) New() *client {
 	domain, err := b.cfg.Get("domain")
 	if err != nil {
 		return nil
 	}
 	token, err := b.cfg.Get("signToken")
 	if err != nil {
-		return &client{imgix.NewClient(domain)}
+		return &client{imgix.NewClient(domain + ".imgix.net")}
 	}
-	return &client{imgix.NewClientWithToken(domain, token)}
+	return &client{imgix.NewClientWithToken(domain+".imgix.net", token)}
 }

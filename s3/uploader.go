@@ -1,22 +1,24 @@
 package s3
 
 import (
-	"github.com/aws/aws-sdk-go/aws"
-	"io"
-	"net/http"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"io/ioutil"
-	"fmt"
 	"crypto/sha256"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 type s3Uploader interface {
 	SetBody(body io.ReadSeeker)
+	SetName(name string)
 	Upload() error
 }
 
 func wrap(format string, err error, args ...interface{}) error {
-	if err!= nil {
+	if err != nil {
 		format = format + ": %s"
 		args = append(args, err.Error())
 		return fmt.Errorf(format, args...)
@@ -104,6 +106,10 @@ func (u *uploader) Upload() error {
 	}
 	_, err := u.client.PutObject(params)
 	return err
+}
+
+func (u *uploader) SetName(name string) {
+	u.Path(name)
 }
 
 func (u *uploader) GetKey() string {

@@ -20,8 +20,8 @@ type builder struct {
 func merge(ins ...url.Values) url.Values {
 	r := url.Values{}
 
-	for _, in := range (ins) {
-		for key, val := range (in) {
+	for _, in := range ins {
+		for key, val := range in {
 			r[key] = val
 		}
 	}

@@ -1,8 +1,9 @@
 package url
 
 import (
-	"testing"
 	"net/url"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -14,6 +15,7 @@ func (t testTransformer) GetImgixURLValues() url.Values {
 		"h": {"100"},
 	}
 }
+
 type testTransformer2 struct{}
 
 func (t testTransformer2) GetImgixURLValues() url.Values {
@@ -23,7 +25,7 @@ func (t testTransformer2) GetImgixURLValues() url.Values {
 	}
 }
 
-type testFormatter struct {}
+type testFormatter struct{}
 
 func (t testFormatter) URL(path string, values url.Values) string {
 	return path + "?" + values.Encode()

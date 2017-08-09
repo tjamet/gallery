@@ -1,17 +1,13 @@
 package s3
 
 import (
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
-type clientBuilder interface {
-	SharedConfigEnable() clientBuilder
-	Region(region string) clientBuilder
-	Context(c *aws.Context) clientBuilder
-	Bucket(bucket string) clientBuilder
+type ClientBuilder interface {
 	UploaderWith() s3Uploader
 }
 
@@ -78,7 +74,7 @@ func (b *builder) buildS3Client() (*s3.S3, error) {
 	return s3.New(s, aws.NewConfig().WithRegion(b.region)), nil
 }
 
-func (b *builder) UploaderWith() *uploader {
+func (b *builder) UploaderWith() s3Uploader {
 	cl, err := b.buildS3Client()
 	return UploaderWith().
 		Error(err).

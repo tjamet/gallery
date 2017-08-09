@@ -1,18 +1,19 @@
 package config
 
 import (
-	"gopkg.in/ini.v1"
 	"log"
 	user "os/user"
+
+	"github.com/go-ini/ini"
 )
 
 type INIConfig struct {
-	path string
+	path    string
 	section string
-	cfg *ini.File
+	cfg     *ini.File
 }
 
-func With() (*INIConfig) {
+func With() *INIConfig {
 	c := &INIConfig{}
 	return c.Section("default")
 }
@@ -26,7 +27,7 @@ func (c *INIConfig) Path(path string) *INIConfig {
 	if path[:2] == "~/" {
 		usr, err := user.Current()
 		if err != nil {
-			log.Fatal( err )
+			log.Fatal(err)
 		}
 		path = usr.HomeDir + "/" + path[2:]
 	}
@@ -37,7 +38,7 @@ func (c *INIConfig) Path(path string) *INIConfig {
 func (c *INIConfig) Build() *INIConfig {
 	cfg, err := ini.Load(c.path)
 	if err != nil {
-		log.Fatal( err )
+		log.Fatal(err)
 	}
 	c.cfg = cfg
 	return c

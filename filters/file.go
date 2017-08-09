@@ -9,7 +9,3 @@ type InfoProvider interface {
 func IsFile(info InfoProvider) bool {
 	return !info.IsDir()
 }
-
-
-
-
