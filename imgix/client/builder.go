@@ -9,6 +9,10 @@ type builder struct {
 	cfg config.Getter
 }
 
+type client struct {
+	client imgix.Client
+}
+
 func With() *builder {
 	return &builder{}
 }
@@ -18,17 +22,14 @@ func (b *builder) Config(cfg config.Getter) *builder {
 	return b
 }
 
-func (b *builder) New() (*imgix.Client) {
+func (b *builder) New() (*client) {
 	domain, err := b.cfg.Get("domain")
 	if err != nil {
 		return nil
 	}
 	token, err := b.cfg.Get("signToken")
-	var client imgix.Client
 	if err != nil {
-		client = imgix.NewClient(domain)
-	} else {
-		client = imgix.NewClientWithToken(domain, token)
+		return &client{imgix.NewClient(domain)}
 	}
-	return &client
+	return &client{imgix.NewClientWithToken(domain, token)}
 }
