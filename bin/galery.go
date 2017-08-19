@@ -19,7 +19,7 @@ import (
 func main() {
 	help := `
 Usage:
-	recover [options]
+	galery [options]
 Options:
 	--region=<region>  The region in which the s3 bucket where to upload files [default: eu-west-1]
 	--bucket=<bucket>  The name of the s3 bucket where to upload files
@@ -61,6 +61,11 @@ Options:
 				"large":  urlBuilder.Clone().Update(url.Large).ForImage(path),
 			}
 		},
+	}
+
+	if args["--dry"].(bool) {
+		uploader.UploaderBuilder = &s3.DryBuilder{}
+		uploader.SearchClient = &algolia.DryRun{}
 	}
 
 	ds := visiter.New(args["--src"].(string), shards)
