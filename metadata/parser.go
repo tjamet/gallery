@@ -24,7 +24,7 @@ var mapping map[string]string = map[string]string{
 type Metadata struct {
 	Path     string
 	ID       string
-	metadata map[string]interface{}
+	Metadata map[string]interface{}
 	err      error
 }
 
@@ -88,13 +88,13 @@ func (m *Metadata) Load() *Metadata {
 		m.ID = v.(string)
 	}
 
-	m.metadata = r
+	m.Metadata = r
 	m.err = nil
 	return m
 }
 
 func (m *Metadata) GetMetadata() (map[string]interface{}, error) {
-	return m.metadata, m.err
+	return m.Metadata, m.err
 }
 
 func Load(m *Metadata) *Metadata {

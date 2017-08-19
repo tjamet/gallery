@@ -14,6 +14,7 @@ import (
 	"github.com/tjamet/gallery/metadata"
 	"github.com/tjamet/gallery/s3"
 	"github.com/tjamet/gallery/visiter"
+	"github.com/tjamet/gallery/util"
 )
 
 func main() {
@@ -63,6 +64,12 @@ Options:
 		},
 	}
 
+	l := []string{}
+	util.JsonPath("~/.galery/keywords.json", &l)
+
+
+
+
 	if args["--dry"].(bool) {
 		uploader.UploaderBuilder = &s3.DryBuilder{}
 		uploader.SearchClient = &algolia.DryRun{}
@@ -71,6 +78,10 @@ Options:
 	ds := visiter.New(args["--src"].(string), shards)
 	ds = ds.Filter(filters.IsFile).Map(visiter.GetPath)
 	ds = ds.Map(metadata.FromFile).Map(metadata.Load).Filter(filters.HasNoError)
+	if len(l) > 0 {
+		kwFilter := filters.MetadataFilterFromWhitelist(l)
+		ds = ds.Map(kwFilter.Filter)
+	}
 	ds = ds.Map(uploader.Entry).Map(uploader.Upload).Filter(filters.HasNoError)
 	ds = ds.Map(uploader.Index)
 	ds.Run()
