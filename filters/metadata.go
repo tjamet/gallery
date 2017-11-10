@@ -13,15 +13,25 @@ type KeyWordFilter struct {
 func (f *KeyWordFilter) Filter(m *metadata.Metadata) *metadata.Metadata {
 	var output metadata.Metadata
 	output = *m
-	if kwds, ok := m.Metadata["Keywords"].([]interface{}); ok {
+	if kwdsObj, ok := m.Metadata["Keywords"]; ok {
 		newKwds := []string{}
-		for _, key := range kwds {
-			if keep, ok := f.Keywords[strings.ToLower(key.(string))]; ok {
-				if keep {
+		if kwds, ok := kwdsObj.([]interface{}); ok {
+			for _, key := range kwds {
+				if keep, ok := f.Keywords[strings.ToLower(key.(string))]; ok {
+					if keep {
+						newKwds = append(newKwds, key.(string))
+					}
+				} else if f.Default {
 					newKwds = append(newKwds, key.(string))
 				}
+			}
+		} else if v, ok := kwdsObj.(string); ok {
+			if keep, ok := f.Keywords[strings.ToLower(v)]; ok {
+				if keep {
+					newKwds = append(newKwds, v)
+				}
 			} else if f.Default {
-				newKwds = append(newKwds, key.(string))
+				newKwds = append(newKwds, v)
 			}
 		}
 		output.Metadata["Keywords"] = newKwds
