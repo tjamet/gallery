@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: stable
+          # This Gitea runner has no Actions cache service.
+          cache: false
+      # The tree has no go.mod yet and is not gofmt-clean, so only parse
+      # errors are gated here. The module steps below are skipped, not faked,
+      # until go.mod lands.
+      - name: Syntax
+        run: gofmt -e -l . > /dev/null
+      - name: Vet
+        if: hashFiles('go.mod') != ''
+        run: go vet ./...
+      - name: Build
+        if: hashFiles('go.mod') != ''
+        run: go build ./...
+      - name: Test
+        if: hashFiles('go.mod') != ''
+        run: go test -count=1 ./...
