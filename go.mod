@@ -1,6 +1,6 @@
 module github.com/tjamet/gallery
 
-go 1.21
+go 1.27
 
 require (
 	github.com/algolia/algoliasearch-client-go v2.25.0+incompatible

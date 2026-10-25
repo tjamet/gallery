@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v7
         with:
-          go-version: stable
+          go-version-file: go.mod
           # This Gitea runner has no Actions cache service.
           cache: false
       # The tree has no go.mod yet and is not gofmt-clean, so only parse
