@@ -1,6 +1,7 @@
 package s3
 
 import (
+	"os"
 	"strings"
 	"testing"
 
@@ -11,6 +12,9 @@ import (
 )
 
 func TestUpload(t *testing.T) {
+	if os.Getenv("GALLERY_INTEGRATION") == "" {
+		t.Skip("set GALLERY_INTEGRATION=1 to run against live AWS S3 (shared AWS config)")
+	}
 	bucketName := uuid.New().String()
 	region := "eu-west-1"
 	path := "test"
@@ -33,11 +37,10 @@ func TestUpload(t *testing.T) {
 	assert.NoError(t, err)
 
 	builder.Bucket(bucketName)
-	err = builder.UploaderWith().
-		Path(path).
-		Body(strings.NewReader("hello world")).
-		Upload()
-	assert.NoError(t, err)
+	up := builder.UploaderWith()
+	up.SetName(path)
+	up.SetBody(strings.NewReader("hello world"))
+	assert.NoError(t, up.Upload())
 
 	rmObj := &s3.DeleteObjectInput{
 		Bucket: aws.String(bucketName),

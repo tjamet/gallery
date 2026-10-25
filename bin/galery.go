@@ -13,8 +13,8 @@ import (
 	"github.com/tjamet/gallery/imgix/url"
 	"github.com/tjamet/gallery/metadata"
 	"github.com/tjamet/gallery/s3"
-	"github.com/tjamet/gallery/visiter"
 	"github.com/tjamet/gallery/util"
+	"github.com/tjamet/gallery/visiter"
 )
 
 func main() {
@@ -30,13 +30,13 @@ Options:
 	`
 	args, err := docopt.Parse(help, os.Args[1:], true, "0.0.0", false)
 	if err != nil {
-		fmt.Fprint(os.Stderr, "Failed to parse commandline: %s\n", err.Error())
+		fmt.Fprintf(os.Stderr, "Failed to parse commandline: %s\n", err.Error())
 		os.Exit(1)
 	}
 
 	shards, err := strconv.Atoi(args["--shards"].(string))
 	if err != nil {
-		fmt.Fprint(os.Stderr, "Failed to parse shard number: %s\n", err.Error())
+		fmt.Fprintf(os.Stderr, "Failed to parse shard number: %s\n", err.Error())
 		os.Exit(1)
 	}
 	if args["--bucket"] == nil || args["--src"] == nil {
@@ -66,9 +66,6 @@ Options:
 
 	l := []string{}
 	util.JsonPath("~/.galery/keywords.json", &l)
-
-
-
 
 	if args["--dry"].(bool) {
 		uploader.UploaderBuilder = &s3.DryBuilder{}

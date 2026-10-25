@@ -1,12 +1,16 @@
 package metadata
 
 import (
+	"os/exec"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestMetadata_GetMetadata(t *testing.T) {
+	if _, err := exec.LookPath("exiftool"); err != nil {
+		t.Skip("exiftool is not installed")
+	}
 	m := FromFile("../resources/images/test.jpg").Load()
 	expected := map[string]interface{}{
 		"Artist":    "Thibault JAMET",

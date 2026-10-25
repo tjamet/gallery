@@ -1,6 +1,7 @@
 package algolia
 
 import (
+	"os"
 	"testing"
 	"time"
 
@@ -10,6 +11,9 @@ import (
 )
 
 func TestClient(t *testing.T) {
+	if os.Getenv("GALLERY_INTEGRATION") == "" {
+		t.Skip("set GALLERY_INTEGRATION=1 to run against a live Algolia app (~/.algolia/credentials)")
+	}
 	indexName := "test-" + uuid.New().String()
 	builder := With().Index(indexName)
 	client, err := builder.newAdminClient()

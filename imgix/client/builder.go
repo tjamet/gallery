@@ -17,8 +17,7 @@ func With() *builder {
 	return &builder{
 		cfg: config.With().
 			Path("~/.imgix/credentials").
-			Section("default").
-			Build(),
+			Section("default"),
 	}
 }
 

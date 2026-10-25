@@ -4,7 +4,7 @@ import (
 	"log"
 	user "os/user"
 
-	"github.com/go-ini/ini"
+	"gopkg.in/ini.v1"
 )
 
 type INIConfig struct {
